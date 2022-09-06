@@ -43,4 +43,9 @@ public class CarServiceImpl implements CarService {
     public void insertCar(Car car) {
         carDao.insertCar(car);
     }
+
+    @Override
+    public List<Car> findByBeginEndIndex(String carName,int beginIndex,int endIndex) {
+        return carDao.findByBeginEndIndex(carName,beginIndex,endIndex);
+    }
 }

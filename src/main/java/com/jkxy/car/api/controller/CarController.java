@@ -85,4 +85,42 @@ public class CarController {
         carService.insertCar(car);
         return JSONResult.ok();
     }
+    /**
+     * 车辆购买
+     *
+     * @param carName
+     * @param carCount
+     * @return
+     */
+    @GetMapping("buyCar/{carName}/{carCount}")
+    public JSONResult buyCar(@PathVariable String carName, @PathVariable int carCount) {
+        List<Car> cars = carService.findByCarName(carName);
+        Car car;
+        if (cars.size() > 0) {
+            car = cars.get(0);
+            if (car.getCarCount() >= carCount) {
+                car.setCarCount(car.getCarCount() - carCount);
+                carService.updateById(car);
+            } else {
+                return JSONResult.errorMsg("库存不足！请重新输入!");
+            }
+        } else {
+            return JSONResult.errorMsg("输入车名错误！请重新输入!");
+        }
+        return JSONResult.ok("成功购买" + carName + " 数量：" + carCount + "台！");
+    }
+
+    /**
+     * 模糊查询并分页
+     *
+     * @param carName
+     * @param beginIndex
+     * @param endIndex
+     * @return
+     */
+    @GetMapping("findByBeginEndIndex/{carName}/{beginIndex}/{endIndex}")
+    public JSONResult buyCar(@PathVariable String carName, @PathVariable int beginIndex, @PathVariable int endIndex) {
+        List<Car> cars = carService.findByBeginEndIndex(carName, beginIndex, endIndex);
+        return JSONResult.ok(cars);
+    }
 }
